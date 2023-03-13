@@ -1,16 +1,18 @@
 package APISteps1;
 
-import io.qameta.allure.Step;
+import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.json.JSONObject;
-
 import static APISteps1.getCharacter.charId;
+import static APISteps1.lastCharacter.lastChar;
 import static io.restassured.RestAssured.given;
 
 public class getLocation {
     public static String mortyLocation;
     public static String lastCharLocation;
-    @Step("Получаем локацию морти")
+
+    @When("Получаем локацию Морти")
     public static void getMortyLocation()
     {
         Response gettingChar = given()
@@ -21,19 +23,20 @@ public class getLocation {
                 .extract()
                 .response();
         mortyLocation = (new JSONObject(gettingChar.getBody().asString()).get("location").toString());
-        System.out.println("Местоположение Morty: " + mortyLocation);
+        Allure.addAttachment("Локация Морти: ", mortyLocation);
     }
-    @Step("Получаем локацию последнего персонажа")
-    public static void getLastCharacterLocation(int id)
+
+    @When("Получаем локацию последнего персонажа")
+    public static void getLastCharacterLocation()
     {
         Response gettingChar = given()
                 .baseUri("https://rickandmortyapi.com/api")
                 .when()
-                .get("/character/" +id)
+                .get("/character/" +lastChar)
                 .then()
                 .extract()
                 .response();
         lastCharLocation = (new JSONObject(gettingChar.getBody().asString()).get("location").toString());
-        System.out.println("Местоположение последнего персонажа: " + lastCharLocation);
+        Allure.addAttachment("Локация последнего персонажа: ", lastCharLocation);
     }
 }

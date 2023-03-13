@@ -1,15 +1,16 @@
 package APISteps1;
 
-import io.qameta.allure.Step;
+import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.json.JSONObject;
-
 import static APISteps1.getCharacter.charId;
 import static io.restassured.RestAssured.given;
 
 public class lastEpisode {
     public static int lastEp;
-    @Step("Получаем последний эпизод")
+
+    @When("Получаем эпизод")
     public static void getEpisode()
     {
         Response getLastEpisode = given()
@@ -21,8 +22,7 @@ public class lastEpisode {
                 .response();
         int episode = (new JSONObject(getLastEpisode.getBody().asString()).getJSONArray("episode").length()-1);
         lastEp = Integer.parseInt(new JSONObject(getLastEpisode.getBody().asString()).getJSONArray("episode").get(episode).toString().replaceAll("[^0-9]",""));
-        System.out.println("Номер последнего эпизода: " +lastEp);
-
+        Allure.addAttachment("Номер последнего эпизода: ", String.valueOf(lastEp));
 
     }
 }

@@ -1,16 +1,18 @@
 package APISteps1;
 
-import io.qameta.allure.Step;
+import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.json.JSONObject;
-
 import static APISteps1.getCharacter.charId;
+import static APISteps1.lastCharacter.lastChar;
 import static io.restassured.RestAssured.given;
 
 public class getSpecies {
     public static String mortySpecies;
     public static String lastCharSpecies;
-    @Step("Получаем расу Морти")
+
+    @When("Получаем расу Морти")
 
 
     public static void getMortySpecies()
@@ -24,22 +26,23 @@ public class getSpecies {
                 .response();
 
         mortySpecies = (new JSONObject(gettingChar.getBody().asString()).get("species").toString());
-        System.out.println("Раса Morty: " + mortySpecies);
+        Allure.addAttachment("Раса Морти: ", mortySpecies);
 
     }
-    @Step("Получаем расу последнего персонажа")
-    public static void getLastCharacterSpecies(int id)
+
+    @When("Получаем расу последнего персонажа")
+    public static void getLastCharacterSpecies()
     {
         Response gettingChar = given()
                 .baseUri("https://rickandmortyapi.com/api")
                 .when()
-                .get("/character/" +id)
+                .get("/character/" +lastChar)
                 .then()
                 .extract()
                 .response();
 
         lastCharSpecies = (new JSONObject(gettingChar.getBody().asString()).get("species").toString());
-        System.out.println("Раса последнего персонажа: " + lastCharSpecies);
+        Allure.addAttachment("Раса последнего персонажа: ", lastCharSpecies);
 
     }
 
